@@ -4,7 +4,7 @@
     <a href="https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/vscode-remote-try-python">
       <img src="https://img.shields.io/static/v1?label=Dev%20Containers&message=Abrir&color=blue&logo=visualstudiocode" alt="Open in Dev Containers" />
     </a>
-    <img src="https://badgen.net/github/tag/damarals/wizard?color=purple" alt="Latest Tag" />
+    <img src="https://img.shields.io/github/v/tag/damarals/wizard?color=success&label=" alt="Latest Tag" />
 </div>
 
 <br />
