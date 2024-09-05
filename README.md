@@ -1,7 +1,7 @@
 <img alt="little-date banner" src=".github/banner.png" style="border-radius: 15px; max-width: 100%; height: auto; display: block; margin: 0 0 16px 0;"/>
 
 <div align="center">
-    <img src="https://img.shields.io/github/v/tag/damarals/wizard?color=success&label=Versão" alt="Latest Tag" />
+    <img src="https://img.shields.io/github/v/tag/damarals/wizard?color=success&label=" alt="Latest Tag" />
 </div>
 
 <br />
