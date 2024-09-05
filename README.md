@@ -1,7 +1,7 @@
 <img alt="little-date banner" src=".github/banner.png" style="border-radius: 15px; max-width: 100%; height: auto; display: block; margin: 0 0 16px 0;"/>
 
 <div align="center">
-    <a href="https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/vscode-remote-try-python">
+    <a href="https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/damarals/wizard">
       <img src="https://img.shields.io/static/v1?label=Dev%20Containers&message=Abrir&color=blue&logo=visualstudiocode" alt="Open in Dev Containers" />
     </a>
     <img src="https://img.shields.io/github/v/tag/damarals/wizard?color=success&label=" alt="Latest Tag" />
