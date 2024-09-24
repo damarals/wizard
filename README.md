@@ -7,7 +7,7 @@
 <br />
 
 <div align="center"><strong>Ambientes de Ciência de Dados Rápidos e Automatizados</strong></div>
-<div align="center">Uma configuração Docker <i>opinada</i> que permite a criação de ambientes para ciência de dados de maneira rápida e automatizada.</div>
+<div align="center">Uma configuração Docker <i>opinada</i> que permite a criação de ambientes para ciência de dados<br/>de maneira rápida e automatizada.</div>
 
 <br />
 <div align="center">
