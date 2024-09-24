@@ -11,7 +11,7 @@
 
 <br />
 <div align="center">
-  <sub>Desenvolvido por <a href="https://github.com/damarals">Daniel Amaral</a> 👨‍🔬 durante o projeto Cientista Chefe do Governo do Estado do Ceará</sub>
+  <sub>Desenvolvido por <a href="https://github.com/damarals">Daniel Amaral</a> 👨‍🔬</sub>
 </div>
 
 <br />
