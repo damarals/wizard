@@ -3,6 +3,7 @@ Main application window for Wizard.
 """
 
 import os
+import sys
 
 from PySide6.QtCore import QSize, Qt, Slot
 from PySide6.QtGui import QIcon
@@ -51,27 +52,21 @@ class MainWindow(QMainWindow):
         self.stylesheet = setup_theme(theme_mode)
         self.setStyleSheet(self.stylesheet + get_additional_stylesheet())
 
-        # Set application icon
-        try:
-            # Try multiple possible paths for the icon
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            icon_paths = [
-                os.path.join(
-                    os.path.dirname(os.path.dirname(os.path.dirname(current_dir))),
-                    "resources",
-                    "icon.ico",
-                ),
-                os.path.join(current_dir, "..", "..", "..", "resources", "icon.ico"),
-                os.path.join(current_dir, "..", "resources", "icon.ico"),
-            ]
+        icon_path = os.path.abspath(
+            os.path.join(
+                os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "resources", "icon.ico"
+            )
+        )
+        if not os.path.exists(icon_path):
+            # Fallback for PyInstaller bundle
+            base_dir = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+            icon_path = os.path.join(base_dir, "icon.ico")
+            if not os.path.exists(icon_path):
+                # Final fallback
+                icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon.ico")
 
-            for icon_path in icon_paths:
-                if os.path.exists(icon_path):
-                    app_icon = QIcon(icon_path)
-                    self.setWindowIcon(app_icon)
-                    break
-        except Exception as e:
-            logger.warning(f"Failed to set window icon: {e}")
+        app_icon = QIcon(icon_path)
+        self.setWindowIcon(app_icon)
 
         # Initialize search manager
         self.search_manager = SearchManager(
