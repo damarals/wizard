@@ -2,7 +2,10 @@
 Main application window for Wizard.
 """
 
+import os
+
 from PySide6.QtCore import QSize, Qt, Slot
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -47,6 +50,28 @@ class MainWindow(QMainWindow):
         theme_mode = self.config.get("theme_mode", "light")
         self.stylesheet = setup_theme(theme_mode)
         self.setStyleSheet(self.stylesheet + get_additional_stylesheet())
+
+        # Set application icon
+        try:
+            # Try multiple possible paths for the icon
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            icon_paths = [
+                os.path.join(
+                    os.path.dirname(os.path.dirname(os.path.dirname(current_dir))),
+                    "resources",
+                    "icon.ico",
+                ),
+                os.path.join(current_dir, "..", "..", "..", "resources", "icon.ico"),
+                os.path.join(current_dir, "..", "resources", "icon.ico"),
+            ]
+
+            for icon_path in icon_paths:
+                if os.path.exists(icon_path):
+                    app_icon = QIcon(icon_path)
+                    self.setWindowIcon(app_icon)
+                    break
+        except Exception as e:
+            logger.warning(f"Failed to set window icon: {e}")
 
         # Initialize search manager
         self.search_manager = SearchManager(

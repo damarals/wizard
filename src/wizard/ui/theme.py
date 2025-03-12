@@ -100,6 +100,11 @@ def get_additional_stylesheet():
         background-color: #3d31a3;
     }}
     
+    QPushButton.primary-action:disabled {{
+        background-color: #9b96c9;
+        color: #e0e0e0;
+    }}
+    
     /* Icon button styling */
     QPushButton.icon-button {{
         background-color: transparent;
