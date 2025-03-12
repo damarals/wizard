@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wizard"
-version = "0.2.0"
+version = "0.3.0"
 description = "A tool for searching and extracting article metadata from the CAPES Periodicals Portal."
 authors = ["Daniel Amaral <silva.daniel86@gmail.com>", "CAPES Research Wizard Team"]
 readme = "README.md"
