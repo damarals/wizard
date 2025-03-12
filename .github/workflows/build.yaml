@@ -27,13 +27,13 @@ jobs:
     
     - name: Build Windows executable
       run: |
-        poetry run pyinstaller --name="Wizard" --windowed --icon=resources/icon.ico --clean --noconfirm src/wizard/main.py
+        poetry run pyinstaller --name="Wizard" --windowed --icon=resources/icon.ico --onefile --clean --noconfirm src/wizard/main.py
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: windows-executable
-        path: dist/Wizard/
+        path: dist/Wizard.exe
         
   build-linux:
     runs-on: ubuntu-latest
@@ -60,13 +60,13 @@ jobs:
     
     - name: Build Linux executable
       run: |
-        poetry run pyinstaller --name="Wizard" --windowed --clean --noconfirm src/wizard/main.py
+        poetry run pyinstaller --name="Wizard" --windowed --onefile --clean --noconfirm src/wizard/main.py
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: linux-executable
-        path: dist/Wizard/
+        path: dist/Wizard
         
   create-release:
     needs: [build-windows, build-linux]
@@ -80,21 +80,11 @@ jobs:
         with:
           path: artifacts
           
-      - name: Create Windows ZIP
-        run: |
-          cd artifacts/windows-executable
-          zip -r ../../Wizard-Windows.zip .
-          
-      - name: Create Linux ZIP
-        run: |
-          cd artifacts/linux-executable
-          zip -r ../../Wizard-Linux.zip .
-          
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            Wizard-Windows.zip
-            Wizard-Linux.zip
+            artifacts/windows-executable/Wizard.exe
+            artifacts/linux-executable/Wizard
           draft: false
           generate_release_notes: true
