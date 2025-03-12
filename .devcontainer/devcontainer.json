@@ -1,0 +1,43 @@
+{
+    "name": "CAPES Research Wizard",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/wizard/app,type=bind",
+    "workspaceFolder": "/home/wizard/app",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+        "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {}
+    },
+    "remoteUser": "wizard",
+    "containerUser": "wizard",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ryanluker.vscode-coverage-gutters",
+                "njpwerner.autodocstring",
+                "matangover.mypy",
+                "charliermarsh.ruff"
+            ],
+            "settings": {
+                "python.testing.pytestEnabled": true,
+                "python.testing.unittestEnabled": false,
+                "python.testing.nosetestsEnabled": false,
+                "python.testing.pytestArgs": [
+                    "tests"
+                ],
+                "python.linting.enabled": true,
+                "python.formatting.provider": "black",
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "explicit"
+                },
+                "terminal.integrated.defaultProfile.linux": "zsh"
+            }
+        }
+    }
+}
