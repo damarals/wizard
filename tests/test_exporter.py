@@ -6,8 +6,6 @@ import csv
 import os
 from tempfile import TemporaryDirectory
 
-import pytest
-
 from wizard.core.exporter import export_articles, get_available_fields
 
 
@@ -54,7 +52,7 @@ class TestExporter:
             # Export to temporary file with selected fields
             output_file = os.path.join(temp_dir, "test_export_selected.csv")
             fields = ["title", "doi", "is_open_access"]
-            result = export_articles(sample_articles, output_file, fields)
+            _ = export_articles(sample_articles, output_file, fields)
 
             # Check file exists
             assert os.path.exists(output_file)

@@ -1,13 +1,14 @@
+# tests/test_scraper.py
 """
 Tests for the ArticleScraper class.
 """
 
+import urllib.parse
 from unittest.mock import MagicMock, patch
 
-import pytest
 from bs4 import BeautifulSoup
 
-from wizard.core.scraper import Article, ArticleScraper
+from wizard.core.scraper import ArticleScraper
 
 
 class TestArticleScraper:
@@ -34,7 +35,8 @@ class TestArticleScraper:
         scraper = ArticleScraper()
         url = scraper._construct_search_url('climate AND "neural networks"', advanced=True, page=1)
 
-        assert "all:contains" in url
+        decoded_url = urllib.parse.unquote(url)
+        assert "all:contains" in decoded_url
         assert "page=1" in url
         assert "mode=advanced" in url
 
@@ -126,6 +128,8 @@ class TestArticleScraper:
 
         # Execute search
         search_dict = {"Climate AI": "machine learning AND climate change"}
-        results = mock_scraper.search(search_dict, callback=callback)
+        _ = mock_scraper.search(search_dict, callback=callback)
 
-        # Verify callb
+        # Verify callback was called
+        assert len(progress_values) > 0
+        assert len(status_messages) > 0

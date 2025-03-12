@@ -210,7 +210,7 @@ class ArticleScraper:
 
         if advanced:
             # Format for advanced search with operators
-            encoded_term = quote(f"all:-soup-contains({search_term})")
+            encoded_term = quote(f"all:contains({search_term})")
             return f"{self.BASE_URL}?q={encoded_term}&mode=advanced&source=all&page={page}"
         else:
             # Simple search

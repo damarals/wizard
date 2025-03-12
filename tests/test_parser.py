@@ -2,10 +2,6 @@
 Tests for the HTML parser functionality.
 """
 
-from unittest.mock import MagicMock
-
-import pytest
-
 from wizard.core.parser import CAPESParser
 
 
