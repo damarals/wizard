@@ -9,8 +9,8 @@ import os
 from dataclasses import asdict
 from typing import Dict, List, Optional
 
-from ..utils.logger import get_logger
-from .scraper import Article
+from wizard.core.scraper import Article
+from wizard.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

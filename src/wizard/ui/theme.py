@@ -190,7 +190,7 @@ def create_primary_button(text, icon_name=None, callback=None):
     """
     from PySide6.QtWidgets import QPushButton
 
-    from .icons import get_icon
+    from wizard.ui.icons import get_icon
 
     button = QPushButton(text)
     button.setProperty("class", "primary-action")

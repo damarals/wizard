@@ -6,8 +6,8 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QStyle
 from pytablericons import FilledIcon, OutlineIcon, TablerIcons
 
-from ..utils.logger import get_logger
-from .theme import ThemeColors
+from wizard.ui.theme import ThemeColors
+from wizard.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

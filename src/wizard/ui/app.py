@@ -16,18 +16,18 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ..core.scraper import SearchManager
-from ..ui.icons import get_icon
-from ..ui.theme import get_additional_stylesheet, setup_theme
-from ..utils.config import Config
-from ..utils.logger import get_logger
-from .dialogs.add_query import AddQueryDialog
-from .dialogs.edit_query import EditQueryDialog
-from .dialogs.export import ExportDialog
-from .dialogs.export_settings import ExportSettingsDialog
-from .dialogs.search_settings import SearchSettingsDialog
-from .widgets.papers_table import PapersTableWidget
-from .widgets.query_table import QueryTableWidget
+from wizard.core.scraper import SearchManager
+from wizard.ui.dialogs.add_query import AddQueryDialog
+from wizard.ui.dialogs.edit_query import EditQueryDialog
+from wizard.ui.dialogs.export import ExportDialog
+from wizard.ui.dialogs.export_settings import ExportSettingsDialog
+from wizard.ui.dialogs.search_settings import SearchSettingsDialog
+from wizard.ui.icons import get_icon
+from wizard.ui.theme import get_additional_stylesheet, setup_theme
+from wizard.ui.widgets.papers_table import PapersTableWidget
+from wizard.ui.widgets.query_table import QueryTableWidget
+from wizard.utils.config import Config
+from wizard.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -238,7 +238,7 @@ class MainWindow(QMainWindow):
                 return
 
             try:
-                from ..core.exporter import export_articles
+                from wizard.core.exporter import export_articles
 
                 articles = self.papers_table.get_articles()
                 exported_file = export_articles(articles, filename, fields)

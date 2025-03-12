@@ -4,8 +4,8 @@ Helper functions for styling dialogs consistently.
 
 from PySide6.QtWidgets import QDialogButtonBox
 
-from ..icons import get_icon
-from ..theme import ThemeColors
+from wizard.ui.icons import get_icon
+from wizard.ui.theme import ThemeColors
 
 
 def style_dialog_buttons(dialog, button_box):

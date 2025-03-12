@@ -9,9 +9,9 @@ import sys
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
-from . import __version__
-from .ui.app import MainWindow
-from .utils.logger import get_logger, setup_logger
+from wizard import __version__
+from wizard.ui.app import MainWindow
+from wizard.utils.logger import get_logger, setup_logger
 
 # Initialize logger
 logger = get_logger(__name__)

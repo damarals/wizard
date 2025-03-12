@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from ..widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
+from wizard.ui.widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
 
 
 class ExportDialog(QDialog):

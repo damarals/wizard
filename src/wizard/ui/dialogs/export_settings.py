@@ -15,8 +15,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ...core.exporter import get_available_fields
-from ..widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
+from wizard.core.exporter import get_available_fields
+from wizard.ui.widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
 
 
 class ExportSettingsDialog(QDialog):
