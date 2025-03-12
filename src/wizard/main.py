@@ -3,8 +3,10 @@ Main entry point for Wizard application.
 """
 
 import argparse
+import os
 import sys
 
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
 from . import __version__
@@ -43,8 +45,16 @@ def main():
     app.setApplicationVersion(__version__)
     app.setOrganizationName("CAPES Research")
 
+    # Set app icon
+    icon_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "resources", "icon.ico"
+    )
+    app_icon = QIcon(icon_path)
+    app.setWindowIcon(app_icon)
+
     # Create and show main window
     window = MainWindow()
+    window.setWindowTitle("Wizard")
     window.show()
 
     # Start the application event loop

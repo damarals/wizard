@@ -14,6 +14,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from ..widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
+
 
 class ExportDialog(QDialog):
     """Dialog for exporting articles to CSV"""
@@ -23,9 +25,7 @@ class ExportDialog(QDialog):
 
         self.config = config
 
-        self.setWindowTitle("Exportar Artigos")
-        self.resize(500, 200)
-
+        setup_dialog_header(self, "Exportar Artigos", "DEVICE_FLOPPY")
         self.setup_ui()
 
     def setup_ui(self):
@@ -59,12 +59,17 @@ class ExportDialog(QDialog):
         layout.addStretch()
 
         # Buttons
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        button_box.button(QDialogButtonBox.Ok).setText("Exportar")
-        button_box.button(QDialogButtonBox.Cancel).setText("Cancelar")
+        button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        button_box.button(QDialogButtonBox.StandardButton.Ok).setText("Exportar")
+        button_box.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         button_box.accepted.connect(self.validate_and_accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
+
+        # Apply styling to buttons
+        style_dialog_buttons(self, button_box)
 
     def browse_file(self):
         """Show file dialog to select save location"""

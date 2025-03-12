@@ -26,15 +26,24 @@ jobs:
         virtualenvs-in-project: true
     
     - name: Install dependencies
+      shell: pwsh
       run: |
+        # Ensure Poetry is in the PATH
+        $env:PATH += ";$env:USERPROFILE\.poetry\bin"
+        # Install dependencies and PyInstaller
         poetry install
         poetry add pyinstaller
     
     - name: Build Windows executable
+      shell: pwsh
       run: |
+        # Ensure Poetry is in the PATH
+        $env:PATH += ";$env:USERPROFILE\.poetry\bin"
+        # Build executable
         poetry run pyinstaller --name="Wizard" --windowed --icon=resources/icon.ico --add-data="src/wizard/ui/assets;wizard/ui/assets" --clean --noconfirm src/wizard/main.py
     
     - name: Create Windows installer
+      shell: pwsh
       run: |
         # Uncomment and configure if using NSIS for installers
         # choco install nsis -y

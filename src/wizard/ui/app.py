@@ -12,12 +12,13 @@ from PySide6.QtWidgets import (
     QPushButton,
     QSplitter,
     QStatusBar,
-    QStyle,
     QVBoxLayout,
     QWidget,
 )
 
 from ..core.scraper import SearchManager
+from ..ui.icons import get_icon
+from ..ui.theme import get_additional_stylesheet, setup_theme
 from ..utils.config import Config
 from ..utils.logger import get_logger
 from .dialogs.add_query import AddQueryDialog
@@ -41,6 +42,11 @@ class MainWindow(QMainWindow):
 
         # Load configuration
         self.config = Config()
+
+        # Apply theme
+        theme_mode = self.config.get("theme_mode", "light")
+        self.stylesheet = setup_theme(theme_mode)
+        self.setStyleSheet(self.stylesheet + get_additional_stylesheet())
 
         # Initialize search manager
         self.search_manager = SearchManager(
@@ -70,6 +76,8 @@ class MainWindow(QMainWindow):
 
         # Create splitter for main sections
         self.splitter = QSplitter(Qt.Vertical)
+        self.splitter.setHandleWidth(2)
+        self.splitter.setChildrenCollapsible(False)
         main_layout.addWidget(self.splitter)
 
         # Add query table (top section)
@@ -90,16 +98,18 @@ class MainWindow(QMainWindow):
 
         # Add Query button
         add_query_btn = QPushButton("Adicionar Consulta")
-        add_query_btn.setIcon(self.style().standardIcon(QStyle.SP_FileDialogNewFolder))
+        add_query_btn.setIcon(get_icon("PLUS", color="#FFFFFF"))
         add_query_btn.clicked.connect(self.show_add_dialog)
+        add_query_btn.setProperty("class", "primary-action")
         queries_header_layout.addWidget(add_query_btn)
 
         # Search Settings button
         search_settings_btn = QPushButton()
-        search_settings_btn.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
+        search_settings_btn.setIcon(get_icon("SETTINGS"))
         search_settings_btn.setToolTip("Configurações de Busca")
         search_settings_btn.clicked.connect(self.show_search_settings_dialog)
-        search_settings_btn.setFixedSize(QSize(24, 24))
+        search_settings_btn.setProperty("class", "icon-button")
+        search_settings_btn.setFixedSize(QSize(30, 30))
         queries_header_layout.addWidget(search_settings_btn)
 
         query_layout.addWidget(queries_header)
@@ -120,7 +130,7 @@ class MainWindow(QMainWindow):
         # Papers count and export button
         papers_header = QWidget()
         papers_header_layout = QHBoxLayout(papers_header)
-        papers_header_layout.setContentsMargins(0, 0, 0, 5)
+        papers_header_layout.setContentsMargins(0, 10, 0, 5)
 
         papers_title = QLabel("Artigos")
         papers_title.setStyleSheet("font-size: 14px; font-weight: bold;")
@@ -133,17 +143,19 @@ class MainWindow(QMainWindow):
 
         # Export Papers button
         self.export_button = QPushButton("Exportar Artigos")
-        self.export_button.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+        self.export_button.setIcon(get_icon("DEVICE_FLOPPY", color="#FFFFFF"))  # Use white icon
         self.export_button.setEnabled(False)
         self.export_button.clicked.connect(self.show_export_dialog)
+        self.export_button.setProperty("class", "primary-action")
         papers_header_layout.addWidget(self.export_button)
 
         # Export Settings button
         export_settings_btn = QPushButton()
-        export_settings_btn.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
+        export_settings_btn.setIcon(get_icon("SETTINGS"))
         export_settings_btn.setToolTip("Configurações de Exportação")
         export_settings_btn.clicked.connect(self.show_export_settings_dialog)
-        export_settings_btn.setFixedSize(QSize(24, 24))
+        export_settings_btn.setFixedSize(QSize(30, 30))
+        export_settings_btn.setProperty("class", "icon-button")
         papers_header_layout.addWidget(export_settings_btn)
 
         papers_layout.addWidget(papers_header)

@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from ...core.exporter import get_available_fields
+from ..widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
 
 
 class ExportSettingsDialog(QDialog):
@@ -27,9 +28,7 @@ class ExportSettingsDialog(QDialog):
         self.config = config
         self.updating_checkboxes = False  # Flag para evitar loops de sinal
 
-        self.setWindowTitle("Configurações de Exportação")
-        self.resize(500, 400)
-
+        setup_dialog_header(self, "Configurações de Exportação", "SETTINGS")
         self.setup_ui()
 
     def setup_ui(self):
@@ -137,12 +136,17 @@ class ExportSettingsDialog(QDialog):
         layout.addWidget(options_group)
 
         # Buttons
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        button_box.button(QDialogButtonBox.Ok).setText("Salvar")
-        button_box.button(QDialogButtonBox.Cancel).setText("Cancelar")
+        button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        button_box.button(QDialogButtonBox.StandardButton.Ok).setText("Salvar")
+        button_box.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         button_box.accepted.connect(self.save_settings)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
+
+        # Apply styling to buttons
+        style_dialog_buttons(self, button_box)
 
     def toggle_all_fields(self, checked):
         """Toggle all field checkboxes"""

@@ -30,11 +30,31 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: true
     
-    - name: Install dependencies
+    - name: Install dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        # Ensure Poetry is in the PATH
+        $env:PATH += ";$env:USERPROFILE\.poetry\bin"
+        # Install dependencies
+        poetry install --with dev,test
+    
+    - name: Install dependencies (Linux)
+      if: matrix.os == 'ubuntu-latest'
       run: |
         poetry install --with dev,test
     
-    - name: Test with pytest
+    - name: Test with pytest (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        # Ensure Poetry is in the PATH
+        $env:PATH += ";$env:USERPROFILE\.poetry\bin"
+        # Run tests
+        poetry run pytest -v --cov=wizard --cov-report=xml
+    
+    - name: Test with pytest (Linux)
+      if: matrix.os == 'ubuntu-latest'
       run: |
         poetry run pytest -v --cov=wizard --cov-report=xml
     

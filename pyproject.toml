@@ -23,11 +23,13 @@ repository = "https://github.com/damarals/wizard"
 "Bug Tracker" = "https://github.com/damarals/wizard/issues"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.14"
+python = ">=3.11,<3.12"
 pyside6 = "^6.8.2.1"
 requests = "^2.32.3"
 beautifulsoup4 = "^4.13.3"
 pandas = "^2.2.3"
+pytablericons = "^1.0.1"
+pyqtdarktheme = "^2.1.0"
 
 
 [tool.poetry.scripts]

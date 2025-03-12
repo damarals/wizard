@@ -10,13 +10,13 @@ from PySide6.QtWidgets import (
     QHeaderView,
     QProgressBar,
     QPushButton,
-    QStyle,
     QTableWidget,
     QTableWidgetItem,
     QWidget,
 )
 
 from ...utils.logger import get_logger
+from ..icons import get_icon
 
 logger = get_logger(__name__)
 
@@ -144,34 +144,38 @@ class QueryTableWidget(QTableWidget):
 
         # Start button
         start_button = QPushButton()
-        start_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        start_button.setIcon(get_icon("PLAYER_PLAY"))
         start_button.setToolTip("Iniciar Busca")
-        start_button.setFixedSize(QSize(24, 24))
+        start_button.setFixedSize(QSize(26, 26))  # Smaller size
+        start_button.setProperty("class", "icon-button")
         start_button.clicked.connect(lambda: self.start_search.emit(query_id))
         actions_layout.addWidget(start_button)
 
         # Pause button (initially hidden)
         pause_button = QPushButton()
-        pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+        pause_button.setIcon(get_icon("PLAYER_PAUSE"))
         pause_button.setToolTip("Pausar Busca")
-        pause_button.setFixedSize(QSize(24, 24))
+        pause_button.setFixedSize(QSize(26, 26))  # Smaller size
+        pause_button.setProperty("class", "icon-button")
         pause_button.clicked.connect(lambda: self.pause_search.emit(query_id))
         pause_button.setVisible(False)
         actions_layout.addWidget(pause_button)
 
         # Edit button
         edit_button = QPushButton()
-        edit_button.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
+        edit_button.setIcon(get_icon("EDIT"))
         edit_button.setToolTip("Editar Consulta")
-        edit_button.setFixedSize(QSize(24, 24))
+        edit_button.setFixedSize(QSize(26, 26))  # Smaller size
+        edit_button.setProperty("class", "icon-button")
         edit_button.clicked.connect(lambda: self.edit_query.emit(query_id))
         actions_layout.addWidget(edit_button)
 
         # Delete button
         delete_button = QPushButton()
-        delete_button.setIcon(self.style().standardIcon(QStyle.SP_TrashIcon))
+        delete_button.setIcon(get_icon("TRASH"))
         delete_button.setToolTip("Excluir Consulta")
-        delete_button.setFixedSize(QSize(24, 24))
+        delete_button.setFixedSize(QSize(26, 26))  # Smaller size
+        delete_button.setProperty("class", "icon-button")
         delete_button.clicked.connect(lambda: self.delete_query.emit(query_id))
         actions_layout.addWidget(delete_button)
 

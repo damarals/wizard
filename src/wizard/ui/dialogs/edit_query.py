@@ -13,6 +13,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from ..widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
+
 
 class EditQueryDialog(QDialog):
     """Dialog for editing an existing search query"""
@@ -20,8 +22,7 @@ class EditQueryDialog(QDialog):
     def __init__(self, theme, query, advanced, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle("Editar Consulta")
-        self.resize(500, 400)
+        setup_dialog_header(self, "Editar Consulta", "EDIT")
 
         self.original_theme = theme
         self.original_query = query
@@ -72,10 +73,15 @@ class EditQueryDialog(QDialog):
         layout.addWidget(help_label)
 
         # Buttons
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
+
+        # Apply styling to buttons
+        style_dialog_buttons(self, button_box)
 
         # Set focus to theme input
         self.theme_input.setFocus()

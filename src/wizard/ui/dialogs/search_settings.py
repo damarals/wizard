@@ -13,6 +13,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from ..widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
+
 
 class SearchSettingsDialog(QDialog):
     """Dialog for configuring search engine settings"""
@@ -22,9 +24,7 @@ class SearchSettingsDialog(QDialog):
 
         self.config = config
 
-        self.setWindowTitle("Configurações da Busca")
-        self.resize(400, 300)
-
+        setup_dialog_header(self, "Configurações da Busca", "SETTINGS")
         self.setup_ui()
 
     def setup_ui(self):
@@ -83,10 +83,17 @@ class SearchSettingsDialog(QDialog):
         layout.addStretch()
 
         # Buttons
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        button_box.button(QDialogButtonBox.StandardButton.Ok).setText("Salvar")
+        button_box.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         button_box.accepted.connect(self.save_settings)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
+
+        # Apply styling to buttons
+        style_dialog_buttons(self, button_box)
 
     def save_settings(self):
         """Save settings to config and accept dialog"""

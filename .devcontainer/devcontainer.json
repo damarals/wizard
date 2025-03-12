@@ -21,7 +21,6 @@
                 "ms-python.black-formatter",
                 "ryanluker.vscode-coverage-gutters",
                 "njpwerner.autodocstring",
-                "matangover.mypy",
                 "charliermarsh.ruff"
             ],
             "settings": {

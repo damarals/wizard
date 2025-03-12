@@ -13,15 +13,19 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from ..widgets.dialog_helpers import setup_dialog_header, style_dialog_buttons
+
 
 class AddQueryDialog(QDialog):
     """Dialog for adding a new search query"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        # Use a standard icon name that exists in TablerIcons
+        setup_dialog_header(self, "Adicionar Consulta", "SEARCH")
 
-        self.setWindowTitle("Adicionar Consulta")
-        self.resize(500, 400)
+        # Set fixed width for a more consistent UI
+        self.setMinimumWidth(600)
 
         self.setup_ui()
 
@@ -39,6 +43,7 @@ class AddQueryDialog(QDialog):
         # Query input
         layout.addWidget(QLabel("Termos de Busca:"))
         self.query_input = QTextEdit()
+        self.query_input.setMinimumHeight(150)  # Ensure taller text area
         self.query_input.setPlaceholderText(
             "Digite os termos de busca ou consulta avançada com operadores.\n\n"
             "Exemplos:\n"
@@ -66,12 +71,17 @@ class AddQueryDialog(QDialog):
         layout.addWidget(help_label)
 
         # Buttons
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        button_box.button(QDialogButtonBox.Ok).setText("Adicionar")
-        button_box.button(QDialogButtonBox.Cancel).setText("Cancelar")
+        button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        button_box.button(QDialogButtonBox.StandardButton.Ok).setText("Adicionar")
+        button_box.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
+
+        # Apply styling to buttons
+        style_dialog_buttons(self, button_box)
 
         # Set focus to theme input
         self.theme_input.setFocus()
