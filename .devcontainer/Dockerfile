@@ -1,13 +1,14 @@
-FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim
+FROM sunpeek/poetry:py3.11-slim
+
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Build arguments
 ARG USERNAME=wizard
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install required packages
+# Install required packages for Qt/PySide6
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     git \
@@ -31,20 +32,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 
-# Create project directory and set user permissions
-RUN mkdir -p /home/$USERNAME/app \
-    && chown -R $USERNAME:$USERNAME /home/$USERNAME
+# Add Poetry to PATH for the user
+ENV PATH=/root/.local/bin:/home/$USERNAME/.local/bin:$PATH
 
 # Switch to non-root user
 USER $USERNAME
 WORKDIR /home/$USERNAME/app
 
-# Create a virtual environment instead of using the system Python
-RUN uv venv /home/$USERNAME/.venv
-
-# Configure environment to use the virtual environment
-ENV PATH="/home/$USERNAME/.venv/bin:$PATH" \
-    VIRTUAL_ENV="/home/$USERNAME/.venv"
-
-# Install base packages in the virtual environment
-RUN uv pip install black pytest pytest-cov
+# Configure Poetry
+RUN poetry config virtualenvs.in-project true \
+    && poetry config virtualenvs.prompt "venv"

@@ -1,18 +1,10 @@
-# pyproject.toml
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[project]
-name = "capes-wizard"
-version = "1.0.0"
+[tool.poetry]
+name = "wizard"
+version = "0.2.0"
 description = "A tool for searching and extracting article metadata from the CAPES Periodicals Portal."
+authors = ["Daniel Amaral <silva.daniel86@gmail.com>", "CAPES Research Wizard Team"]
 readme = "README.md"
-requires-python = ">=3.9"
-license = {text = "MIT"}
-authors = [
-    {name = "CAPES Research Wizard Team"}
-]
+license = "MIT"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: GUI",
@@ -24,33 +16,30 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Topic :: Scientific/Engineering :: Information Analysis",
 ]
-dependencies = [
-    "PySide6>=6.5.0",
-    "requests>=2.28.0",
-    "beautifulsoup4>=4.11.0",
-    "pandas>=1.5.0",
-]
+packages = [{include = "wizard", from = "src"}]
+repository = "https://github.com/damarals/wizard"
 
-[project.optional-dependencies]
-dev = [
-    "black>=23.1.0",
-    "flake8>=6.0.0",
-    "isort>=5.12.0",
-]
-test = [
-    "pytest>=7.3.1",
-    "pytest-cov>=4.1.0",
-]
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/damarals/wizard/issues"
 
-[project.urls]
-"Homepage" = "https://github.com/username/capes-wizard"
-"Bug Tracker" = "https://github.com/username/capes-wizard/issues"
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+pyside6 = "^6.8.2.1"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.13.3"
+pandas = "^2.2.3"
 
-[project.scripts]
-capes-wizard = "wizard.main:main"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/wizard"]
+[tool.poetry.scripts]
+wizard = "wizard.main:main"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.5"
+pytest-cov = "^6.0.0"
 
 [tool.black]
 line-length = 100
@@ -64,3 +53,7 @@ line_length = 100
 minversion = "7.0"
 addopts = "-v --cov=wizard"
 testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

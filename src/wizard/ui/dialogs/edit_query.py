@@ -1,5 +1,5 @@
 """
-Dialog for adding a new search query.
+Dialog for editing an existing search query.
 """
 
 from PySide6.QtWidgets import (
@@ -14,14 +14,18 @@ from PySide6.QtWidgets import (
 )
 
 
-class AddQueryDialog(QDialog):
-    """Dialog for adding a new search query"""
+class EditQueryDialog(QDialog):
+    """Dialog for editing an existing search query"""
 
-    def __init__(self, parent=None):
+    def __init__(self, theme, query, advanced, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle("Adicionar Consulta")
+        self.setWindowTitle("Editar Consulta")
         self.resize(500, 400)
+
+        self.original_theme = theme
+        self.original_query = query
+        self.original_advanced = advanced
 
         self.setup_ui()
 
@@ -33,12 +37,14 @@ class AddQueryDialog(QDialog):
         # Theme input
         layout.addWidget(QLabel("Tema:"))
         self.theme_input = QLineEdit()
+        self.theme_input.setText(self.original_theme)
         self.theme_input.setPlaceholderText("ex: Aprendizado de Máquina, Mudanças Climáticas")
         layout.addWidget(self.theme_input)
 
         # Query input
         layout.addWidget(QLabel("Termos de Busca:"))
         self.query_input = QTextEdit()
+        self.query_input.setPlainText(self.original_query)
         self.query_input.setPlaceholderText(
             "Digite os termos de busca ou consulta avançada com operadores.\n\n"
             "Exemplos:\n"
@@ -50,7 +56,7 @@ class AddQueryDialog(QDialog):
         # Advanced search option
         advanced_layout = QHBoxLayout()
         self.advanced_checkbox = QCheckBox("Usar Sintaxe de Busca Avançada")
-        self.advanced_checkbox.setChecked(True)
+        self.advanced_checkbox.setChecked(self.original_advanced)
         advanced_layout.addWidget(self.advanced_checkbox)
         advanced_layout.addStretch()
         layout.addLayout(advanced_layout)
@@ -67,8 +73,6 @@ class AddQueryDialog(QDialog):
 
         # Buttons
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        button_box.button(QDialogButtonBox.Ok).setText("Adicionar")
-        button_box.button(QDialogButtonBox.Cancel).setText("Cancelar")
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)

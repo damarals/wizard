@@ -1,86 +1,94 @@
-# CAPES Research Wizard
+# Wizard
 
-A desktop application for searching and extracting article metadata from the CAPES Periodicals Portal.
+Uma aplicação desktop para pesquisar e extrair metadados de artigos do Portal de Periódicos CAPES.
 
-## Features
+## Funcionalidades
 
-- Search the CAPES Periodicals Portal using multiple search queries
-- Configure search parameters including advanced search syntax
-- View and filter search results
-- Export article metadata to CSV with configurable fields
-- Parallel processing for faster searches
+- Pesquisa no Portal de Periódicos CAPES usando múltiplas consultas
+- Configuração de parâmetros de pesquisa incluindo sintaxe de busca avançada
+- Visualização e filtragem de resultados de pesquisa
+- Exportação de metadados de artigos para CSV com campos configuráveis
+- Processamento paralelo para buscas mais rápidas
 
-## Installation
+## Instalação
 
 ### Windows
 
-Download the latest installer from the [Releases](https://github.com/username/capes-wizard/releases) page and run it.
+Baixe o instalador mais recente da página de [Releases](https://github.com/damarals/wizard/releases) e execute-o.
 
-### From Source
+### Do Código Fonte
 
-```bash
-# Clone the repository
-git clone https://github.com/username/capes-wizard.git
-cd capes-wizard
-
-# Install with uv
-uv venv
-uv pip install -e .
-
-# Run the application
-python -m wizard.main
-```
-
-## Usage
-
-1. **Add Search Queries**
-   - Click "Add Query" to add a new search query
-   - Enter a theme and search terms
-   - Toggle advanced search syntax for complex queries
-
-2. **Configure Settings**
-   - Adjust concurrent workers for parallel processing
-   - Set request delay to avoid overloading the server
-   - Limit the number of pages to scrape per search
-
-3. **Run Searches**
-   - Click the play button next to each query to start searching
-   - Monitor progress in the status bar
-   - View results in the bottom table
-
-4. **Export Results**
-   - Click "Export Papers" to save results to a CSV file
-   - Select which fields to include in the export
-   - Choose a location for the exported file
-
-## Development
-
-### Setup Development Environment
+#### Usando Poetry (recomendado)
 
 ```bash
-# Install development dependencies
-uv pip install -e .[dev,test]
+# Clone o repositório
+git clone https://github.com/damarals/wizard.git
+cd wizard
 
-# Run tests
-pytest
+# Instale as dependências com Poetry
+poetry install
 
-# Run linting
-flake8 src tests
+# Execute a aplicação
+poetry run wizard
 ```
 
-### Project Structure
+#### Dev Container no VS Code
+
+1. Abra o projeto no VS Code
+2. Quando perguntado, escolha "Reabrir no Container"
+3. No terminal integrado, execute:
+   ```bash
+   poetry install
+   poetry run wizard
+   ```
+
+## Uso
+
+1. **Adicionar Consultas de Pesquisa**
+   - Clique em "Adicionar Consulta" para adicionar uma nova consulta
+   - Digite um tema e termos de busca
+   - Ative a sintaxe de busca avançada para consultas complexas
+
+2. **Configurar Preferências**
+   - Ajuste o número de workers concorrentes para processamento paralelo
+   - Configure o atraso entre requisições para evitar sobrecarga do servidor
+   - Limite o número de páginas a serem pesquisadas por consulta
+
+3. **Executar Pesquisas**
+   - Clique no botão de reprodução ao lado de cada consulta para iniciar a pesquisa
+   - Monitore o progresso na barra de status
+   - Visualize os resultados na tabela inferior
+
+4. **Exportar Resultados**
+   - Clique em "Exportar Artigos" para salvar os resultados em um arquivo CSV
+   - Configure quais campos incluir na exportação através das configurações de exportação
+   - Escolha um local para o arquivo exportado
+
+## Desenvolvimento
+
+### Configurar Ambiente de Desenvolvimento
+
+```bash
+# Instale as dependências de desenvolvimento
+poetry install --with dev,test
+
+# Execute os testes
+poetry run pytest
+```
+
+### Estrutura do Projeto
 
 ```
 wizard/
-├── src/               # Source code
+├── src/               # Código fonte
 │   └── wizard/        
-│       ├── core/      # Core functionality (scraper, parser, exporter)
-│       ├── ui/        # User interface components
-│       └── utils/     # Utilities (logging, configuration)
-├── tests/             # Test suite
-└── resources/         # Resources (icons, etc.)
+│       ├── core/      # Funcionalidade principal (scraper, parser, exportador)
+│       ├── ui/        # Componentes da interface do usuário
+│       └── utils/     # Utilitários (logging, configuração)
+├── tests/             # Suíte de testes
+└── resources/         # Recursos (ícones, etc.)
 ```
 
-## License
+## Licença
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.

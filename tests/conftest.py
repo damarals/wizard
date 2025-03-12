@@ -4,15 +4,17 @@ Pytest fixtures for CAPES Research Wizard tests.
 
 import os
 import sys
-import pytest
 from pathlib import Path
 from unittest.mock import MagicMock
+
+import pytest
 
 # Add src directory to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
 from wizard.core.scraper import Article, ArticleScraper
 from wizard.utils.config import Config
+
 
 @pytest.fixture
 def sample_html_search_results():
@@ -21,12 +23,14 @@ def sample_html_search_results():
     with open(fixture_path, "r", encoding="utf-8") as f:
         return f.read()
 
+
 @pytest.fixture
 def sample_html_article_detail():
     """Load sample article detail HTML from fixtures."""
     fixture_path = Path(__file__).parent / "fixtures" / "article_detail.html"
     with open(fixture_path, "r", encoding="utf-8") as f:
         return f.read()
+
 
 @pytest.fixture
 def sample_articles():
@@ -52,7 +56,7 @@ def sample_articles():
             reader_count=120,
             detail_url="https://example.com/articles/ABC123",
             is_open_access=True,
-            is_peer_reviewed=True
+            is_peer_reviewed=True,
         ),
         Article(
             title="Neural Networks in Environmental Science",
@@ -74,9 +78,10 @@ def sample_articles():
             reader_count=65,
             detail_url="https://example.com/articles/DEF456",
             is_open_access=False,
-            is_peer_reviewed=True
-        )
+            is_peer_reviewed=True,
+        ),
     ]
+
 
 @pytest.fixture
 def mock_requests_session():
@@ -88,12 +93,14 @@ def mock_requests_session():
     mock_session.get.return_value = mock_response
     return mock_session
 
+
 @pytest.fixture
 def mock_scraper(mock_requests_session):
     """Create a mock scraper with a mocked requests session."""
     scraper = ArticleScraper(max_workers=1, request_delay=0.01)
     scraper.session = mock_requests_session
     return scraper
+
 
 @pytest.fixture
 def mock_config():
@@ -106,6 +113,6 @@ def mock_config():
         "fetch_details": True,
         "use_advanced_search": True,
         "export_filename": "test_export.csv",
-        "selected_export_fields": ["title", "authors", "doi"]
+        "selected_export_fields": ["title", "authors", "doi"],
     }
     return config
