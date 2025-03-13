@@ -5,7 +5,7 @@
     <a href="https://codecov.io/gh/damarals/wizard" >
       <img src="https://codecov.io/gh/damarals/wizard/graph/badge.svg?token=YJYmxxhTBx" alt="Code Coverage"/>
     </a>
-    <img src="https://img.shields.io/github/last-commit/damarals/wizard/main?label=último%20commit&color=blue" alt="Last Commit" />
+    <img src="https://img.shields.io/github/last-commit/damarals/wizard/main?label=%C3%BAltimo%20commit&color=blue" alt="Last Commit" />
 </div>
 </br>
 <div align="center">Uma aplicação desktop para <b>pesquisar e extrair metadados</b> de artigos do Portal de Periódicos CAPES</div>
