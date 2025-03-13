@@ -24,7 +24,7 @@ class ThemeColors:
     # Status colors for query table
     STATUS_IDLE = "#F8F9FA"  # Light gray
     STATUS_RUNNING = "#FFF3CD"  # Light yellow
-    STATUS_PAUSED = "#E2E3E5"  # Medium gray
+    STATUS_STOPPED = "#E2E3E5"  # Medium gray
     STATUS_COMPLETED = "#D4EDDA"  # Light green
     STATUS_ERROR = "#F8D7DA"  # Light red
 
@@ -132,6 +132,7 @@ def get_additional_stylesheet():
         background-color: rgba(70, 58, 190, 0.4);
         width: 10px;
         margin: 0px;
+        border-radius: 0px;
     }}
     
     /* Table styling */

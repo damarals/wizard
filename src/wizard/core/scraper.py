@@ -136,12 +136,11 @@ class SearchManager(QObject):
         self.workers[query_id] = worker
         worker.start()
 
-    def pause_search(self, query_id):
-        """Pause a running search"""
+    def stop_search(self, query_id):
+        """Stop a running search"""
         if query_id in self.workers:
             worker = self.workers[query_id]
             worker.stop()
-            # Aguarde o thread terminar antes de removê-lo
             worker.wait()
             del self.workers[query_id]
 

@@ -26,9 +26,9 @@ class QueryTableWidget(QTableWidget):
 
     # Signals
     start_search = Signal(str)  # query_id
-    pause_search = Signal(str)  # query_id
+    stop_search = Signal(str)  # query_id
     delete_query = Signal(str)  # query_id
-    edit_query = Signal(str)  # query_id (nova sinal para edição)
+    edit_query = Signal(str)  # query_id
 
     # Column indices
     COL_THEME = 0
@@ -41,7 +41,7 @@ class QueryTableWidget(QTableWidget):
     STATUS_COLORS = {
         "idle": QColor(240, 240, 240),
         "running": QColor(255, 255, 224),  # Light yellow
-        "paused": QColor(220, 220, 220),
+        "stopped": QColor(220, 220, 220),
         "completed": QColor(224, 255, 224),  # Light green
         "error": QColor(255, 224, 224),  # Light red
     }
@@ -50,7 +50,7 @@ class QueryTableWidget(QTableWidget):
     STATUS_LABELS = {
         "idle": "Pronto",
         "running": "Executando",
-        "paused": "Pausado",
+        "stopped": "Cancelado",
         "completed": "Concluído",
         "error": "Erro",
     }
@@ -151,15 +151,15 @@ class QueryTableWidget(QTableWidget):
         start_button.clicked.connect(lambda: self.start_search.emit(query_id))
         actions_layout.addWidget(start_button)
 
-        # Pause button (initially hidden)
-        pause_button = QPushButton()
-        pause_button.setIcon(get_icon("PLAYER_PAUSE"))
-        pause_button.setToolTip("Pausar Busca")
-        pause_button.setFixedSize(QSize(26, 26))  # Smaller size
-        pause_button.setProperty("class", "icon-button")
-        pause_button.clicked.connect(lambda: self.pause_search.emit(query_id))
-        pause_button.setVisible(False)
-        actions_layout.addWidget(pause_button)
+        # Stop button (initially hidden)
+        stop_button = QPushButton()
+        stop_button.setIcon(get_icon("PLAYER_STOP"))
+        stop_button.setToolTip("Cancelar Busca")
+        stop_button.setFixedSize(QSize(26, 26))  # Smaller size
+        stop_button.setProperty("class", "icon-button")
+        stop_button.clicked.connect(lambda: self.stop_search.emit(query_id))
+        stop_button.setVisible(False)
+        actions_layout.addWidget(stop_button)
 
         # Edit button
         edit_button = QPushButton()
@@ -182,7 +182,7 @@ class QueryTableWidget(QTableWidget):
         # Store buttons in query data for reference
         self.queries[query_id]["buttons"] = {
             "start": start_button,
-            "pause": pause_button,
+            "stop": stop_button,
             "edit": edit_button,
             "delete": delete_button,
         }
@@ -251,28 +251,28 @@ class QueryTableWidget(QTableWidget):
         # Update buttons
         buttons = self.queries[query_id]["buttons"]
         buttons["start"].setVisible(False)
-        buttons["pause"].setVisible(True)
+        buttons["stop"].setVisible(True)
         buttons["edit"].setEnabled(False)
 
-    def set_paused(self, query_id):
-        """Set query status to paused"""
+    def set_stopped(self, query_id):
+        """Set query status to stopped"""
         if query_id not in self.queries:
             return
 
         # Update stored data
-        self.queries[query_id]["status"] = "paused"
+        self.queries[query_id]["status"] = "stopped"
 
         # Update status cell
         row = self.queries[query_id]["row"]
         status_item = self.item(row, self.COL_STATUS)
         if status_item:
-            status_item.setText(self.STATUS_LABELS["paused"])
-            status_item.setBackground(self.STATUS_COLORS["paused"])
+            status_item.setText(self.STATUS_LABELS["stopped"])
+            status_item.setBackground(self.STATUS_COLORS["stopped"])
 
         # Update buttons
         buttons = self.queries[query_id]["buttons"]
         buttons["start"].setVisible(True)
-        buttons["pause"].setVisible(False)
+        buttons["stop"].setVisible(False)
         buttons["edit"].setEnabled(True)
 
     def set_completed(self, query_id):
@@ -299,7 +299,7 @@ class QueryTableWidget(QTableWidget):
         # Update buttons
         buttons = self.queries[query_id]["buttons"]
         buttons["start"].setVisible(True)
-        buttons["pause"].setVisible(False)
+        buttons["stop"].setVisible(False)
         buttons["edit"].setEnabled(True)
 
     def set_error(self, query_id, error_message):
@@ -322,7 +322,7 @@ class QueryTableWidget(QTableWidget):
         # Update buttons
         buttons = self.queries[query_id]["buttons"]
         buttons["start"].setVisible(True)
-        buttons["pause"].setVisible(False)
+        buttons["stop"].setVisible(False)
         buttons["edit"].setEnabled(True)
 
     def remove_query(self, query_id):
@@ -360,7 +360,7 @@ class QueryTableWidget(QTableWidget):
         active_queries = [
             data
             for data in self.queries.values()
-            if data["status"] in ["running", "completed", "paused"]
+            if data["status"] in ["running", "completed", "stopped"]
         ]
 
         if not active_queries:

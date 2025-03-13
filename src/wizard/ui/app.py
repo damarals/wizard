@@ -131,7 +131,7 @@ class MainWindow(QMainWindow):
         # Query table
         self.query_table = QueryTableWidget()
         self.query_table.start_search.connect(self.start_search)
-        self.query_table.pause_search.connect(self.pause_search)
+        self.query_table.stop_search.connect(self.stop_search)
         self.query_table.delete_query.connect(self.delete_query)
         self.query_table.edit_query.connect(self.show_edit_dialog)
         query_layout.addWidget(self.query_table, 1)
@@ -334,14 +334,14 @@ class MainWindow(QMainWindow):
             # Update status
             self.status_bar.showMessage(f"Iniciando busca para: {query_data['theme']}")
 
-    def pause_search(self, query_id):
-        self.search_manager.pause_search(query_id)
-        self.query_table.set_paused(query_id)
+    def stop_search(self, query_id):
+        self.search_manager.stop_search(query_id)
+        self.query_table.set_stopped(query_id)
 
         # Update status
         query_data = self.query_table.get_query(query_id)
         if query_data:
-            self.status_bar.showMessage(f"Busca pausada para: {query_data['theme']}")
+            self.status_bar.showMessage(f"Busca cancelada para: {query_data['theme']}")
 
     def delete_query(self, query_id):
         # If search is running, cancel it first
