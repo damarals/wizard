@@ -1,27 +1,112 @@
-# tests/fixtures/search_results.html
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>CAPES Periodicals Portal - Search Results</title>
 </head>
+
 <body>
+    <nav class="br-pagination" aria-label="paginação" data-total="60" data-current="1" data-per-page="30">
+        <div class="pagination-per-page">
+            <div class="br-select">
+                <div class="br-input">
+                    <input id="per-page-selection" type="text" placeholder=" " class="">
+                </div>
+                <div class="br-list" id="list-2272" role="menu">
+                    <div class="br-item selected" role="menuitem" aria-selected="true">
+                        <div class="br-radio">
+                            <input id="per-page-30" type="radio" name="num" value="30" checked="">
+                            <label for="per-page-30">30</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pagination-information d-none d-sm-flex">
+            <span class="current">1</span>–<span class="per-page">30</span>&nbsp;de&nbsp;<span
+                class="total">60</span>&nbsp;itens
+        </div>
+    </nav>
+
     <div id="resultados">
-        <div class="result-busca">
-            <a href="?task=detalhes&source=all&id=ABC123" class="titulo-busca">Machine Learning for Climate Change Research</a>
-            <div class="autores-busca">Smith, J.; Johnson, A.</div>
-            <div class="texto-vertical-busca">2023 | Journal of Climate AI</div>
+        <div id="result-busca-0" class="col-sm-12 mb-1 result-busca">
+            <div class="col-md-12 br-item" id="conteudo-0">
+                <div class="row">
+                    <div class="d-flex align-items-center text-uppercase text-down-01 px-0">
+                        <span class="fw-semibold">Artigo</span>
+                        <span class="br-divider vertical mx-3"></span>
+                        <span class="text-green-cool-vivid-50 fw-semibold mr-2 d-flex align-items-center"
+                            title="Acesso aberto">
+                            <i class="fas fa-lock-open mr-2" aria-hidden="true"></i>
+                            <span class="d-none d-sm-block">Acesso aberto</span>
+                        </span>
+                        <span class="br-divider vertical mx-3"></span>
+                        <span class="text-violet-50 fw-semibold mr-2 d-flex align-items-center"
+                            title="Revisado por pares">
+                            <i class="fas fa-book-reader mr-2" aria-hidden="true"></i>
+                            <span class="d-none d-sm-block">Revisado por pares</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <div class="d-flex py-2 m-0 text-up-02 text-weight-semi-bold">
+                            <span class="text-muted"><strong>1. </strong></span>
+                            <a type="button" href="/index.php/acervo/buscador.html?task=detalhes&source=all&id=ABC123"
+                                class="titulo-busca">
+                                Machine Learning for Climate Change Research
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-down-01 fw-semibold py-1 mb-1">
+                    <a class="view-autor fst-italic" data-autor="Smith, J." href="javascript:void(0);"
+                        type="button">Smith, J.</a>,
+                    <a class="view-autor fst-italic" data-autor="Johnson, A." href="javascript:void(0);"
+                        type="button">Johnson, A.</a>
+                </p>
+
+                <p class="text-down-01">
+                    <b>2023 - </b>
+                    <b>| Journal of Climate AI </b>
+                </p>
+            </div>
         </div>
-        <div class="result-busca">
-            <a href="?task=detalhes&source=all&id=DEF456" class="titulo-busca">Neural Networks in Environmental Science</a>
-            <div class="autores-busca">Brown, M.; Davis, L.</div>
-            <div class="texto-vertical-busca">2022 | Environmental Data Science</div>
+
+        <div id="result-busca-1" class="col-sm-12 mb-1 result-busca">
+            <div class="col-md-12 br-item" id="conteudo-1">
+                <div class="row">
+                    <div class="d-flex align-items-center text-uppercase text-down-01 px-0">
+                        <span class="fw-semibold">Artigo</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <div class="d-flex py-2 m-0 text-up-02 text-weight-semi-bold">
+                            <span class="text-muted"><strong>2. </strong></span>
+                            <a type="button" href="/index.php/acervo/buscador.html?task=detalhes&source=all&id=DEF456"
+                                class="titulo-busca">
+                                Neural Networks in Environmental Science
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-down-01 fw-semibold py-1 mb-1">
+                    <a class="view-autor fst-italic" data-autor="Brown, M." href="javascript:void(0);"
+                        type="button">Brown, M.</a>,
+                    <a class="view-autor fst-italic" data-autor="Davis, L." href="javascript:void(0);"
+                        type="button">Davis, L.</a>
+                </p>
+
+                <p class="text-down-01">
+                    <b>2022 - </b>
+                    <b>| Environmental Data Science </b>
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="pagination-information">
-        <span class="current">1</span> of <span class="total">60</span> results
-    </div>
-    <div class="br-radio">
-        <input type="radio" name="num" value="30" checked>
     </div>
 </body>
+
 </html>

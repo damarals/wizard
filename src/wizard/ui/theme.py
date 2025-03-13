@@ -67,11 +67,11 @@ def get_additional_stylesheet():
     }}
     
     QPushButton:hover {{
-        background-color: {ThemeColors.PRIMARY}22;  /* 22 is alpha for 13% opacity */
+        background-color: rgba(70, 58, 190, 0.13);
     }}
     
     QPushButton:pressed {{
-        background-color: {ThemeColors.PRIMARY}33;  /* 33 is alpha for 20% opacity */
+        background-color: rgba(70, 58, 190, 0.20);
     }}
     
     QPushButton:checked {{
@@ -129,7 +129,7 @@ def get_additional_stylesheet():
     }}
     
     QProgressBar::chunk {{
-        background-color: {ThemeColors.PRIMARY};
+        background-color: rgba(70, 58, 190, 0.4);
         width: 10px;
         margin: 0px;
     }}
@@ -137,15 +137,15 @@ def get_additional_stylesheet():
     /* Table styling */
     QTableWidget {{
         gridline-color: {ThemeColors.LIGHT_GRAY};
-        selection-background-color: {ThemeColors.PRIMARY}22;
+        selection-background-color: rgba(70, 58, 190, 0.11);
     }}
     
     QTableWidget::item:hover {{
-        background-color: {ThemeColors.PRIMARY}11;
+        background-color: rgba(70, 58, 190, 0.08);
     }}
     
     QTableWidget::item:selected {{
-        background-color: {ThemeColors.PRIMARY}33;
+        background-color: rgba(70, 58, 190, 0.20);
         color: {ThemeColors.BLACK};
     }}
     
@@ -164,8 +164,8 @@ def get_additional_stylesheet():
     /* QSplitter styling */
     QSplitter::handle {{
         background-color: {ThemeColors.LIGHT_GRAY};
-        height: 1px;  /* Altura do handle quando horizontal */
-        width: 1px;   /* Largura do handle quando vertical */
+        height: 1px; 
+        width: 1px;
     }}
     
     QSplitter::handle:horizontal {{

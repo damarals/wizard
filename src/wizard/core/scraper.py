@@ -36,12 +36,9 @@ class Article:
     issn: Optional[str] = None
     volume: Optional[str] = None
     issue: Optional[str] = None
-    pages: Optional[str] = None
     language: Optional[str] = None
     publisher: Optional[str] = None
     topics: List[str] = field(default_factory=list)
-    citation_count: Optional[int] = None
-    reader_count: Optional[int] = None
     detail_url: Optional[str] = None
     is_open_access: bool = False
     is_peer_reviewed: bool = False
@@ -95,6 +92,8 @@ class SearchWorker(QThread):
     def stop(self):
         """Stop the worker thread"""
         self.running = False
+        # Emita um sinal final para indicar que a busca foi pausada
+        self.status_updated.emit(self.query_id, "Busca pausada")
 
 
 class SearchManager(QObject):
@@ -140,13 +139,19 @@ class SearchManager(QObject):
     def pause_search(self, query_id):
         """Pause a running search"""
         if query_id in self.workers:
-            self.workers[query_id].stop()
+            worker = self.workers[query_id]
+            worker.stop()
+            # Aguarde o thread terminar antes de removê-lo
+            worker.wait()
             del self.workers[query_id]
 
     def cancel_search(self, query_id):
         """Cancel a running search"""
         if query_id in self.workers:
-            self.workers[query_id].stop()
+            worker = self.workers[query_id]
+            worker.stop()
+            # Aguarde o thread terminar antes de removê-lo
+            worker.wait()
             del self.workers[query_id]
 
     def update_settings(self, max_workers=None, request_delay=None, max_pages=None):
@@ -172,14 +177,14 @@ class ArticleScraper:
     BASE_URL = "https://www.periodicos.capes.gov.br/index.php/acervo/buscador.html"
     DETAIL_URL_PATTERN = "https://www.periodicos.capes.gov.br/index.php/acervo/buscador.html?task=detalhes&source=all&id={}"
 
-    def __init__(self, max_workers=3, request_delay=2.0, max_pages=None):
+    def __init__(self, max_workers=3, request_delay=2.0, max_pages=0):
         """
         Initialize the scraper.
 
         Args:
             max_workers: Maximum number of concurrent workers for parallel requests
             request_delay: Delay between requests in seconds
-            max_pages: Maximum number of pages to scrape per search (None for all)
+            max_pages: Maximum number of pages to scrape per search (0 for all)
         """
         self.max_workers = max_workers
         self.request_delay = request_delay
@@ -258,40 +263,13 @@ class ArticleScraper:
             Total number of pages (defaults to 1 if cannot determine)
         """
         try:
-            # Method 1: Look for the total in the pagination nav data attribute
-            pagination_nav = soup.select_one("nav.br-pagination")
-            if pagination_nav:
-                total_items_attr = pagination_nav.get("data-total")
-                per_page_attr = pagination_nav.get("data-per-page")
-
-                if total_items_attr and per_page_attr:
-                    total_items = int(total_items_attr)
-                    per_page = int(per_page_attr)
-                    if per_page > 0:
-                        logger.info(f"Found total items: {total_items}, per page: {per_page}")
-                        return (total_items + per_page - 1) // per_page  # Ceiling division
-
-            # Method 2: Look for the total in the pagination information text
             total_span = soup.select_one("div.pagination-information span.total")
             if total_span and total_span.text.strip().isdigit():
                 total_items = int(total_span.text.strip())
-
-                # Find the per-page setting - check the selected radio button
                 per_page = 30  # Default to 30 items per page
-                selected_per_page = soup.select_one('div.br-radio input[name="num"][checked]')
-                if selected_per_page and selected_per_page.get("value"):
-                    per_page = int(selected_per_page.get("value"))
 
                 logger.info(f"Found total items from span: {total_items}, per page: {per_page}")
                 return (total_items + per_page - 1) // per_page  # Ceiling division
-
-            # Method 3: Check if we have at least some results
-            if soup.select("#resultados .result-busca"):
-                # If we can't determine total pages but have results, assume at least 1 page
-                logger.warning(
-                    "Could not determine total pages, but found results. Assuming at least 1 page."
-                )
-                return 1
 
             # No results
             logger.warning("No results found.")
@@ -333,6 +311,14 @@ class ArticleScraper:
             if issn_elem and issn_elem.parent and issn_elem.parent.find_next_sibling():
                 metadata["issn"] = issn_elem.parent.find_next_sibling().text.strip()
 
+            # Extract publication date (year)
+            year_elem = soup.select_one("#item-ano")
+            if year_elem:
+                # Remove semicolon and other non-digit characters
+                year_text = re.search(r"(\d{4})", year_elem.text)
+                if year_text:
+                    metadata["publication_date"] = year_text.group(1)
+
             # Extract volume, issue, language
             pub_info = soup.select_one("p.small.text-muted")
             if pub_info:
@@ -344,7 +330,7 @@ class ArticleScraper:
                     metadata["volume"] = volume_match.group(1).strip()
 
                 # Extract issue
-                issue_match = re.search(r"Issue:\s*([^;]+)", text)
+                issue_match = re.search(r"Issue:\s*(\d+)", text)
                 if issue_match:
                     metadata["issue"] = issue_match.group(1).strip()
 
@@ -359,17 +345,6 @@ class ArticleScraper:
                 topics_text = topics_elem.parent.find_next_sibling().text.strip()
                 metadata["topics"] = [topic.strip() for topic in topics_text.split(",")]
 
-            # Extract publisher
-            publisher_elem = soup.select_one('b:-soup-contains("Editora")') or soup.select_one(
-                'b:-soup-contains("Publisher")'
-            )
-            if publisher_elem and publisher_elem.parent:
-                metadata["publisher"] = (
-                    publisher_elem.parent.text.replace("Editora:", "")
-                    .replace("Publisher:", "")
-                    .strip()
-                )
-
             # Check if open access
             open_access_elem = soup.select_one(".text-green-cool-vivid-50")
             metadata["is_open_access"] = bool(open_access_elem)
@@ -377,24 +352,6 @@ class ArticleScraper:
             # Check if peer-reviewed
             peer_reviewed_elem = soup.select_one(".text-violet-50")
             metadata["is_peer_reviewed"] = bool(peer_reviewed_elem)
-
-            # Extract citation counts
-            citation_elem = soup.select_one('.ppp-count:-soup-contains("Citation Indexes")')
-            if citation_elem:
-                citation_text = citation_elem.text.strip()
-                try:
-                    metadata["citation_count"] = int(re.search(r"\d+", citation_text).group())
-                except (AttributeError, ValueError):
-                    pass
-
-            # Extract reader counts
-            reader_elem = soup.select_one('.ppp-count:-soup-contains("Readers")')
-            if reader_elem:
-                reader_text = reader_elem.text.strip()
-                try:
-                    metadata["reader_count"] = int(re.search(r"\d+", reader_text).group())
-                except (AttributeError, ValueError):
-                    pass
 
             # Extract authors
             authors = []
@@ -415,17 +372,7 @@ class ArticleScraper:
                         metadata["doi"] = doi
                         break
 
-            # Extract publication date and journal
-            pub_info_elem = soup.select_one('.text-down-01:-soup-contains(")")')
-            if pub_info_elem:
-                pub_text = pub_info_elem.text.strip()
-                year_match = re.search(r"(\d{4})", pub_text)
-                if year_match:
-                    metadata["publication_date"] = year_match.group(1)
-
-                journal_match = re.search(r"\|\s*(.+?)\s*$", pub_text)
-                if journal_match:
-                    metadata["journal"] = journal_match.group(1).strip()
+            # Journal and publisher are now extracted from the search results page in _extract_basic_article_info
 
             return metadata
 
@@ -518,7 +465,7 @@ class ArticleScraper:
                 callback(5, f"Found {total_pages} pages for '{theme}'")
 
             # Apply MAX_PAGES limit if set
-            if self.max_pages is not None and self.max_pages > 0:
+            if self.max_pages > 0:
                 total_pages = min(total_pages, self.max_pages)
                 logger.info(f"Limiting to {total_pages} pages due to MAX_PAGES setting")
 
@@ -591,6 +538,25 @@ class ArticleScraper:
                         detail_url = f"https://www.periodicos.capes.gov.br{detail_url}"
                     article_id = self._extract_article_id_from_url(detail_url)
 
+                # Extract publisher and journal from text-down-01 paragraph
+                publisher = None
+                journal = None
+                journal_paragraphs = section.select("p.text-down-01")
+                for p in journal_paragraphs:
+                    if "| " in p.text:
+                        # Format is typically: "Year - Publisher | Journal"
+                        parts = p.text.split("|")
+                        if len(parts) >= 2:
+                            # Get journal (right side of |)
+                            journal = parts[1].strip()
+
+                            # Get publisher (left side of |, after the year)
+                            left_side = parts[0]
+                            if "-" in left_side:
+                                publisher_part = left_side.split("-", 1)[1]
+                                publisher = publisher_part.strip()
+                        break
+
                 # Only store basic info needed for the second phase
                 listings.append(
                     {
@@ -599,6 +565,8 @@ class ArticleScraper:
                         "detail_url": detail_url,
                         "theme": theme,
                         "search_term": search_term,
+                        "journal": journal,
+                        "publisher": publisher,
                     }
                 )
 
@@ -664,6 +632,8 @@ class ArticleScraper:
                     search_term=listing.get("theme", listing.get("search_term", "")),
                     article_id=article_id,
                     detail_url=listing.get("detail_url"),
+                    journal=listing.get("journal"),
+                    publisher=listing.get("publisher"),
                 )
 
                 # Update article with remaining detailed information

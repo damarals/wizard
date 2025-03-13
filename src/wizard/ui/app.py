@@ -64,9 +64,9 @@ class MainWindow(QMainWindow):
 
         # Initialize search manager
         self.search_manager = SearchManager(
-            max_workers=self.config.get("max_workers", 3),
-            request_delay=self.config.get("request_delay", 2.0),
-            max_pages=self.config.get("max_pages", 5),
+            max_workers=self.config.get("max_workers", 5),
+            request_delay=self.config.get("request_delay", 1.5),
+            max_pages=self.config.get("max_pages", 0),
         )
 
         # Connect signals from search manager

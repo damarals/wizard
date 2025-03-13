@@ -1,52 +1,102 @@
-# tests/fixtures/article_detail.html
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>CAPES Periodicals Portal - Article Detail</title>
 </head>
+
 <body>
-    <h1 class="title">Machine Learning for Climate Change Research</h1>
-    
-    <div class="text-down-01">Smith, J.; Johnson, A. (2023) | Journal of Climate AI</div>
-    
-    <div id="item-resumo">
+    <div class="d-flex align-items-center text-uppercase text-down-01 px-0">
+        <span class="fw-semibold">Artigo</span>
+        <span class="br-divider vertical mx-3"></span>
+        <span class="text-green-cool-vivid-50 fw-semibold mr-2" title="Acesso aberto"
+            aria-describedby="open-acess-item-">
+            <i class="fas fa-lock-open mr-1" aria-hidden="true"></i>
+            <span id="open-acess-item-">Acesso aberto</span>
+        </span>
+        <span class="br-divider vertical mx-3"></span>
+        <span class="text-violet-50 fw-semibold mr-2" title="Revisado por pares" aria-describedby="peer-reviewed-item-">
+            <i class="fas fa-book-reader mr-1" aria-hidden="true"></i>
+            <span id="peer-reviewed-item-">Revisado por pares</span>
+        </span>
+    </div>
+
+    <h2 class="text-weight-semi-bold p-0 my-2" id="item-titulo">Machine Learning for Climate Change Research</h2>
+
+    <p class="small text-muted">
+        <strong id="item-ano">2023;</strong>
+        <strong id="item-instituicao">Science Publishers;</strong>
+        <strong id="item-volume">Volume: 45;</strong>
+        <strong id="item-issue">Issue: 2</strong>
+        <strong id="item-language">Linguagem: English</strong>
+    </p>
+
+    <p class="small text-muted mb-3 block">
+        10.1234/journal.2023.001
+    </p>
+
+    <strong>ISSN</strong>
+    <p class="text-muted mb-3 block">
+        1234-5678
+    </p>
+
+    <strong>Autores</strong>
+    <p class="text-base fw-semibold py-1 mb-1">
+        <a class="view-autor fst-italic" data-autor="Smith, J." href="javascript:void(0);" type="button">Smith, J.</a>,
+        <a class="view-autor fst-italic" data-autor="Johnson, A." href="javascript:void(0);" type="button">Johnson,
+            A.</a>
+    </p>
+
+    <strong>Tópico(s)</strong>
+    <p id="item-autores" class="mb-3 text-justify text-muted">
+        Machine Learning, Climate Change, AI
+    </p>
+
+    <strong>Resumo</strong>
+    <p id="item-resumo" class="mb-3 text-justify">
         This paper explores how machine learning can be used to analyze climate data.
         The authors demonstrate various techniques for prediction and pattern recognition
         in environmental datasets.
-    </div>
-    
-    <p class="small text-muted">
-        Volume: 45; Issue: 2; Pages: 123-145; Linguagem: English
     </p>
-    
-    <div>
-        <b>ISSN:</b>
-        <span>1234-5678</span>
+
+    <div class="text-down-01">
+        <b>2023 - </b>
+        <b>Science Publishers </b>
+        <b>| Journal of Climate AI </b>
     </div>
-    
-    <div>
-        <b>Tópico(s):</b>
-        <span>Machine Learning, Climate Change, AI</span>
+
+    <div class="PlumX-Summary">
+        <div class="pps-container pps-container-vertical">
+            <div class="pps-cols">
+                <div class="pps-col plx-citation">
+                    <div class="plx-citation">
+                        <div class="pps-title">Citations</div>
+                        <ul>
+                            <li class="plx-citation">
+                                <span class="pps-label">Citation Indexes: </span>
+                                <span class="pps-count">15</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pps-col plx-capture">
+                    <div class="plx-capture">
+                        <div class="pps-title">Captures</div>
+                        <ul>
+                            <li class="plx-capture">
+                                <span class="pps-label">Readers: </span>
+                                <span class="pps-count">120</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div>
-        <b>Editora:</b>
-        <span>Science Publishers</span>
-    </div>
-    
-    <div class="text-green-cool-vivid-50">Open Access</div>
-    <div class="text-violet-50">Peer Reviewed</div>
-    
-    <div class="ppp-count">Citation Indexes: 15</div>
-    <div class="ppp-count">Readers: 120</div>
-    
-    <div class="authors">
-        <span class="view-autor">Smith, J.</span>
-        <span class="view-autor">Johnson, A.</span>
-    </div>
-    
+
     <div class="links">
         <a href="https://doi.org/10.1234/journal.2023.001">View Article</a>
     </div>
 </body>
+
 </html>

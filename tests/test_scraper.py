@@ -1,4 +1,3 @@
-# tests/test_scraper.py
 """
 Tests for the ArticleScraper class.
 """
@@ -81,14 +80,33 @@ class TestArticleScraper:
         # Create BeautifulSoup object from sample HTML
         soup = BeautifulSoup(sample_html_search_results, "html.parser")
 
-        # Mock the pagination element
-        pagination = soup.new_tag(
-            "nav", **{"class": "br-pagination", "data-total": "120", "data-per-page": "30"}
-        )
-        soup.body.append(pagination)
-
         total_pages = scraper._get_total_pages(soup)
-        assert total_pages == 4  # 120 items / 30 per page = 4 pages
+        assert total_pages == 2  # 60 items / 30 per page = 2 pages
+
+    def test_scrape_article_detail(self, sample_html_article_detail):
+        """Test scraping article detail page."""
+        scraper = ArticleScraper()
+
+        # Mock the session response
+        mock_response = MagicMock()
+        mock_response.text = sample_html_article_detail
+        mock_response.raise_for_status = MagicMock()
+
+        scraper.session = MagicMock()
+        scraper.session.get.return_value = mock_response
+
+        metadata = scraper.scrape_article_detail("ABC123")
+
+        # Check that the key fields were extracted correctly
+        assert metadata["abstract"] is not None
+        assert metadata["publication_date"] == "2023"
+        assert len(metadata["authors"]) == 2
+        assert metadata["is_open_access"] is True
+        assert metadata["is_peer_reviewed"] is True
+        assert metadata["doi"] == "10.1234/journal.2023.001"
+        assert "issue" in metadata
+        assert "volume" in metadata
+        assert "language" in metadata
 
     @patch("wizard.core.scraper.requests.Session")
     def test_search(self, mock_session_class, mock_scraper, sample_articles):

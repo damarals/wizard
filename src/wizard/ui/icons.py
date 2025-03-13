@@ -56,7 +56,6 @@ ICON_MAPPING = {
     QStyle.SP_DialogOkButton: "CHECK",
     QStyle.SP_DialogCancelButton: "X",
     QStyle.SP_MediaPlay: "PLAYER_PLAY",
-    QStyle.SP_MediaPause: "PLAYER_PAUSE",
     QStyle.SP_TrashIcon: "TRASH",
     QStyle.SP_ArrowBack: "ARROW_LEFT",
     QStyle.SP_ArrowForward: "ARROW_RIGHT",

@@ -38,7 +38,7 @@ class SearchSettingsDialog(QDialog):
         # Workers
         self.workers_spin = QSpinBox()
         self.workers_spin.setRange(1, 10)
-        self.workers_spin.setValue(self.config.get("max_workers", 3))
+        self.workers_spin.setValue(self.config.get("max_workers", 5))
         self.workers_spin.setToolTip("Número de pesquisas concorrentes")
         performance_layout.addRow("Pesquisas Concorrentes:", self.workers_spin)
 
@@ -46,15 +46,15 @@ class SearchSettingsDialog(QDialog):
         self.delay_spin = QDoubleSpinBox()
         self.delay_spin.setRange(0.5, 10.0)
         self.delay_spin.setSingleStep(0.5)
-        self.delay_spin.setValue(self.config.get("request_delay", 2.0))
+        self.delay_spin.setValue(self.config.get("request_delay", 1.5))
         self.delay_spin.setToolTip("Intervalo entre requisições em segundos")
         performance_layout.addRow("Intervalo (segundos):", self.delay_spin)
 
         # Max pages
         self.max_pages_spin = QSpinBox()
-        self.max_pages_spin.setRange(1, 100)
-        self.max_pages_spin.setValue(self.config.get("max_pages", 5))
-        self.max_pages_spin.setSpecialValueText("Todos")  # "1" will display as "Todos"
+        self.max_pages_spin.setRange(0, 100)
+        self.max_pages_spin.setValue(self.config.get("max_pages", 0))
+        self.max_pages_spin.setSpecialValueText("Todos")
         self.max_pages_spin.setToolTip("Número máximo de páginas por busca")
         performance_layout.addRow("Máximo de Páginas por Busca:", self.max_pages_spin)
 

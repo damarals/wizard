@@ -89,16 +89,16 @@ class CAPESParser:
                 pub_elem = section.select_one(".texto-vertical-busca")
                 if pub_elem:
                     pub_text = pub_elem.text.strip()
+                    pub_info = CAPESParser.extract_publication_info(pub_text)
 
-                    # Extract year
-                    year_match = re.search(r"(\d{4})", pub_text)
-                    if year_match:
-                        article_data["year"] = year_match.group(1)
+                    if pub_info["publication_date"]:
+                        article_data["publication_date"] = pub_info["publication_date"]
 
-                    # Extract journal
-                    journal_match = re.search(r"\|\s*(.+?)$", pub_text)
-                    if journal_match:
-                        article_data["journal"] = journal_match.group(1).strip()
+                    if pub_info["journal"]:
+                        article_data["journal"] = pub_info["journal"]
+
+                    if pub_info["publisher"]:
+                        article_data["publisher"] = pub_info["publisher"]
 
                 # Add to results if we have title and id
                 if "title" in article_data and "article_id" in article_data:
@@ -124,8 +124,10 @@ class CAPESParser:
         metadata = {}
 
         try:
-            # Extract title
-            title_elem = soup.select_one("h1.title")
+            # Extract title - try multiple selectors for better robustness
+            title_elem = soup.select_one("h1.title")  # Original selector from test
+            if not title_elem:
+                title_elem = soup.select_one("h2#item-titulo")  # Real site selector
             if title_elem:
                 metadata["title"] = title_elem.text.strip()
 
@@ -165,16 +167,20 @@ class CAPESParser:
                 topics_text = topics_elem.parent.find_next_sibling().text.strip()
                 metadata["topics"] = [topic.strip() for topic in topics_text.split(",")]
 
-            # Extract publisher
-            publisher_elem = soup.select_one('b:-soup-contains("Editora")') or soup.select_one(
-                'b:-soup-contains("Publisher")'
-            )
-            if publisher_elem and publisher_elem.parent:
-                metadata["publisher"] = (
-                    publisher_elem.parent.text.replace("Editora:", "")
-                    .replace("Publisher:", "")
-                    .strip()
-                )
+            # Extract publisher, publication date, and journal from text-down-01
+            pub_info_elem = soup.select_one(".text-down-01")
+            if pub_info_elem:
+                pub_text = pub_info_elem.text.strip()
+                pub_info = CAPESParser.extract_publication_info(pub_text)
+
+                if pub_info["publication_date"]:
+                    metadata["publication_date"] = pub_info["publication_date"]
+
+                if pub_info["journal"]:
+                    metadata["journal"] = pub_info["journal"]
+
+                if pub_info["publisher"]:
+                    metadata["publisher"] = pub_info["publisher"]
 
             # Check if open access
             open_access_elem = soup.select_one(".text-green-cool-vivid-50")
@@ -183,24 +189,6 @@ class CAPESParser:
             # Check if peer-reviewed
             peer_reviewed_elem = soup.select_one(".text-violet-50")
             metadata["is_peer_reviewed"] = bool(peer_reviewed_elem)
-
-            # Extract citation counts
-            citation_elem = soup.select_one('.ppp-count:-soup-contains("Citation Indexes")')
-            if citation_elem:
-                citation_text = citation_elem.text.strip()
-                try:
-                    metadata["citation_count"] = int(re.search(r"\d+", citation_text).group())
-                except (AttributeError, ValueError):
-                    pass
-
-            # Extract reader counts
-            reader_elem = soup.select_one('.ppp-count:-soup-contains("Readers")')
-            if reader_elem:
-                reader_text = reader_elem.text.strip()
-                try:
-                    metadata["reader_count"] = int(re.search(r"\d+", reader_text).group())
-                except (AttributeError, ValueError):
-                    pass
 
             # Extract authors
             authors = []
@@ -225,19 +213,59 @@ class CAPESParser:
                         metadata["doi"] = doi_match.group(1)
                         break
 
-            # Extract publication date and journal
-            pub_info_elem = soup.select_one('.text-down-01:-soup-contains(")")')
-            if pub_info_elem:
-                pub_text = pub_info_elem.text.strip()
-                year_match = re.search(r"(\d{4})", pub_text)
-                if year_match:
-                    metadata["publication_date"] = year_match.group(1)
-
-                journal_match = re.search(r"\|\s*(.+?)\s*$", pub_text)
-                if journal_match:
-                    metadata["journal"] = journal_match.group(1).strip()
-
         except Exception as e:
             logger.error(f"Error parsing article detail: {e}")
 
         return metadata
+
+    @staticmethod
+    def extract_publication_info(text):
+        """
+        Extract publication date, publisher, and journal from text-down-01 format text.
+
+        Args:
+            text: String in format "YEAR - [PUBLISHER] | JOURNAL" or "YEAR | JOURNAL"
+
+        Returns:
+            Dictionary with publication_date, publisher, and journal
+        """
+        info = {"publication_date": None, "publisher": None, "journal": None}
+
+        if not text:
+            return info
+
+        # Strip any extra whitespace and join broken text
+        text = " ".join(text.split())
+
+        # First try to extract year from the beginning (simpler approach)
+        year_match = re.match(r"^(\d{4})", text)
+        if year_match:
+            info["publication_date"] = year_match.group(1)
+
+        # Check if we have the "YEAR - [PUBLISHER] | JOURNAL" format (article detail)
+        if " - " in text:
+            parts = text.split(" - ", 1)
+
+            # If we have a second part after " - ", process it for publisher/journal
+            if len(parts) > 1 and parts[1].strip():
+                pub_journal = parts[1].strip()
+
+                # Split by " | " to separate publisher and journal
+                if " | " in pub_journal:
+                    pub_parts = pub_journal.split(" | ", 1)
+                    info["publisher"] = pub_parts[0].strip()
+                    info["journal"] = pub_parts[1].strip()
+                # Just journal with the "| Journal" format
+                elif pub_journal.startswith("|"):
+                    info["journal"] = pub_journal[1:].strip()
+                # Just publisher
+                else:
+                    info["publisher"] = pub_journal
+
+        # Check if we have the "YEAR | JOURNAL" format (search results)
+        elif "|" in text:
+            parts = text.split("|", 1)
+            if len(parts) > 1:
+                info["journal"] = parts[1].strip()
+
+        return info

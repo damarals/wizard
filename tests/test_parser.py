@@ -30,31 +30,77 @@ class TestCAPESParser:
 
     def test_parse_article_detail(self, sample_html_article_detail):
         """Test parsing article detail HTML."""
-        metadata = CAPESParser.parse_article_detail(sample_html_article_detail)
+        # We need to properly add a text-down-01 element to the sample HTML
+        sample_html = sample_html_article_detail.replace(
+            "<body>",
+            '<body>\n<p class="text-down-01">2023 - Science Publishers | Journal of Climate AI</p>',
+        )
+
+        metadata = CAPESParser.parse_article_detail(sample_html)
 
         # Check common metadata fields
         assert "title" in metadata
+        assert "abstract" in metadata
 
-        # Check optional fields that may be present
-        optional_fields = [
-            "abstract",
-            "issn",
-            "volume",
-            "issue",
-            "language",
-            "topics",
-            "publisher",
-            "is_open_access",
-            "is_peer_reviewed",
-            "citation_count",
-            "reader_count",
-            "authors",
-            "doi",
-            "publication_date",
-            "journal",
+        # Check for extracted publication info
+        assert metadata.get("publication_date") == "2023"
+        assert metadata.get("journal") == "Journal of Climate AI"
+        assert metadata.get("publisher") == "Science Publishers"
+
+    def test_extract_publication_info(self):
+        """Test extracting publication information from different formats."""
+        test_cases = [
+            # Format: Year - | Journal
+            (
+                "2021 - | Computers, materials & continua/Computers, materials & continua (Print)",
+                {
+                    "publication_date": "2021",
+                    "publisher": None,
+                    "journal": "Computers, materials & continua/Computers, materials & continua (Print)",
+                },
+            ),
+            # Format: Year - Publisher | Journal
+            (
+                "2020 - Multidisciplinary Digital Publishing Institute | Energies",
+                {
+                    "publication_date": "2020",
+                    "publisher": "Multidisciplinary Digital Publishing Institute",
+                    "journal": "Energies",
+                },
+            ),
+            # Format: Year - Publisher | Journal
+            (
+                "2013 - Springer Nature | Health Information Science and Systems",
+                {
+                    "publication_date": "2013",
+                    "publisher": "Springer Nature",
+                    "journal": "Health Information Science and Systems",
+                },
+            ),
+            # Format: Year - | Journal
+            (
+                "2022 - | Balkan Journal of Electrical and Computer Engineering",
+                {
+                    "publication_date": "2022",
+                    "publisher": None,
+                    "journal": "Balkan Journal of Electrical and Computer Engineering",
+                },
+            ),
+            # Format: Year - Publisher | Journal
+            (
+                "2021 - Elsevier BV | Science of Computer Programming",
+                {
+                    "publication_date": "2021",
+                    "publisher": "Elsevier BV",
+                    "journal": "Science of Computer Programming",
+                },
+            ),
+            # Format from search results: Year | Journal
+            ("2023 | Nature", {"publication_date": "2023", "publisher": None, "journal": "Nature"}),
+            # Edge case: no publisher or journal
+            ("2023 - ", {"publication_date": "2023", "publisher": None, "journal": None}),
         ]
 
-        # Assert that at least some of the optional fields are present
-        # (We don't need all of them to be present in the sample)
-        has_some_optional_fields = any(field in metadata for field in optional_fields)
-        assert has_some_optional_fields, "No optional metadata fields were found"
+        for text, expected in test_cases:
+            result = CAPESParser.extract_publication_info(text)
+            assert result == expected, f"Failed for input: '{text}'"

@@ -61,9 +61,9 @@ class Config:
     def _set_defaults(self):
         """Set default configuration values if not present."""
         defaults = {
-            "max_workers": 3,
-            "request_delay": 2.0,
-            "max_pages": 5,
+            "max_workers": 5,
+            "request_delay": 1.5,
+            "max_pages": 0,
             "fetch_details": True,
             "use_advanced_search": True,
             "auto_resize_columns": True,

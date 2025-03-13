@@ -66,17 +66,14 @@ class ExportSettingsDialog(QDialog):
             "abstract": "Resumo",
             "search_term": "Tema da Busca",
             "topics": "Tópicos",
-            "citation_count": "Contagem de Citações",
             "is_open_access": "Acesso Aberto",
             "is_peer_reviewed": "Revisado por Pares",
             "article_id": "ID do Artigo",
             "issn": "ISSN",
             "volume": "Volume",
             "issue": "Edição",
-            "pages": "Páginas",
             "language": "Idioma",
             "publisher": "Editora",
-            "reader_count": "Contagem de Leitores",
             "detail_url": "URL do Artigo",
         }
 

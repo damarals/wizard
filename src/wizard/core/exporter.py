@@ -74,8 +74,6 @@ def export_articles(
                 "publisher",
                 "is_open_access",
                 "is_peer_reviewed",
-                "citation_count",
-                "reader_count",
                 "detail_url",
             }
 
@@ -117,16 +115,13 @@ def get_available_fields() -> List[Dict[str, str]]:
         {"name": "abstract", "description": "Article abstract", "default_enabled": True},
         {"name": "search_term", "description": "Search theme", "default_enabled": True},
         {"name": "topics", "description": "Article topics", "default_enabled": True},
-        {"name": "citation_count", "description": "Citation count", "default_enabled": True},
         {"name": "is_open_access", "description": "Open access status", "default_enabled": True},
         {"name": "is_peer_reviewed", "description": "Peer review status", "default_enabled": True},
         {"name": "article_id", "description": "CAPES article ID", "default_enabled": False},
         {"name": "issn", "description": "Journal ISSN", "default_enabled": False},
         {"name": "volume", "description": "Journal volume", "default_enabled": False},
         {"name": "issue", "description": "Journal issue", "default_enabled": False},
-        {"name": "pages", "description": "Page numbers", "default_enabled": False},
         {"name": "language", "description": "Article language", "default_enabled": False},
         {"name": "publisher", "description": "Publisher name", "default_enabled": False},
-        {"name": "reader_count", "description": "Reader count", "default_enabled": False},
         {"name": "detail_url", "description": "Article detail URL", "default_enabled": False},
     ]
